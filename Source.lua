@@ -16,6 +16,7 @@ local upgradeselect = OnClientEvents:WaitForChild("UpgradeSelect")
 local basicTable = {"Power", "Agility", "Vitality", "Force", "Range"}
 local rareTable = {"Greatsword", "Maestro", "Shatter", "Brute force", "Adrenaline", "Riposte", "Fleetfoot", "Survivor", "Healthpack"}
 local legendaryTable = {"Reaper", "Blackhole", "Cataclysm", "PerfectDodge", "Shadowstep", "Dismantle", "Assassin", "Giantslayer", "Momentum"}
+local ferrymanTable = {"Lag","Speedster","Turtle","Heavy","Vampire","Glasscannon"}
 
 local function isInTable(tbl, value)
     for _, v in ipairs(tbl) do
@@ -59,13 +60,14 @@ MainTab:AddToggle({
 
 MainTab:AddDropdown({
     Name = "Select Next Upgrades",
-    Default = "Power",
+    Default = "None",
     Options = {
-        "Power", "Agility", "Vitality", "Force", "Range",
+        "None", "Power", "Agility", "Vitality", "Force", "Range",
         "Greatsword", "Maestro", "Shatter", "Brute force",
         "Adrenaline", "Riposte", "Fleetfoot", "Survivor", "Healthpack",
         "Reaper", "Blackhole", "Cataclysm", "PerfectDodge", "Shadowstep",
-      "Dismantle", "Assassin", "Giantslayer", "Momentum"
+      "Dismantle", "Assassin", "Giantslayer", "Momentum",
+        "Lag","Speedster","Turtle","Heavy","Vampire","Glasscannon",
     },
     Callback = function(Value)
         OrionLib:MakeNotification({
@@ -84,9 +86,13 @@ MainTab:AddDropdown({
             upgradeNum = 2
         elseif isInTable(legendaryTable, Value) then
             upgradeNum = 3
+        elseif isInTable(ferrymanTable, Value) then
+            upgradeNum = 4
         end
 
-        OnServerEvents.UpgradeSelected:FireServer(Value, {}, upgradeNum, false)
+        if Value ~= "None" then
+            OnServerEvents.UpgradeSelected:FireServer(Value, {}, upgradeNum, false)
+        end
     end
 })
 
