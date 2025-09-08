@@ -145,22 +145,4 @@ local WalkSpeedSlider = PlayerTab:CreateSlider({
    end,
 })
 
-local FixCameraButton = PlayerTab:CreateButton({
-   Name = "Fix Camera",
-   Callback = function()
-camera.CameraType = Enum.CameraType.Custom
-camera.CameraSubject = character and humanoid or nil
-camera.CFrame = rootpart.CFrame or CFrame.new(0,5,0)
-camera.FieldOfView = 70
-localplayer.CameraMinZoomDistance = 0.5
-localplayer.CameraMaxZoomDistance = 400
-localplayer.CameraMode = "Classic"
-character.Head.Anchored = false
-    Rayfield:Notify({
-   Title = "Fix Camera",
-   Content = "Successfully Fixed Camera!",
-   Duration = 3,
-   Image = 4483362458,
-})
-   end,
-})
+
