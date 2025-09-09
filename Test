@@ -169,12 +169,6 @@ local ThemeDropdown = UITab:CreateDropdown({
    Callback = function(Value)
       Value = unpack(Value)
 Window.ModifyTheme(Value)
-Rayfield:Notify({
-   Title = "UI Theme",
-   Content = "Successfully UI Theme Changed.",
-   Duration = 5,
-   Image = 4483362458,
-})
    end,
 })
 
