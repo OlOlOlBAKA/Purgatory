@@ -72,7 +72,9 @@ local Window = Rayfield:CreateWindow({
 local MainTab = Window:CreateTab("Main", 4483362458) -- Title, Image
 local MainSection = MainTab:CreateSection("Main")
 local PlayerTab = Window:CreateTab("Player", 4483362458) -- Title, Image
-local MainSection = PlayerTab:CreateSection("Main")
+local PlayerSection = PlayerTab:CreateSection("Main")
+local UITab = Window:CreateTab("UI Settings", 4483362458) -- Title, Image
+local UISection = PlayerTab:CreateSection("UI Settings")
 
 -- Main Tab
 
@@ -156,6 +158,25 @@ localplayer.CameraMaxZoomDistance = 400
    end,
 })
 
+-- UI SETTINGS TAB
+
+local ThemeDropdown = UITab:CreateDropdown({
+   Name = "UI Theme",
+   Options = {"Default","AmberGlow","Bloom","DarkBlue","Green","Light","Ocean","Serenity",},
+   CurrentOption = {"Default"},
+   MultipleOptions = false,
+   Flag = "ThemeDropdown", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+      Value = unpack(Value)
+Window.ModifyTheme(Value)
+Rayfield:Notify({
+   Title = "UI Theme",
+   Content = "Successfully UI Theme Changed.",
+   Duration = 5,
+   Image = 4483362458,
+})
+   end,
+})
 
 
 Rayfield:LoadConfiguration()
