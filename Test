@@ -122,6 +122,7 @@ upgradeselect.OnClientEvent:Once(function()
         end
 
         if Value ~= "None" then
+            task.wait(0.1)
             OnServerEvents.UpgradeSelected:FireServer(Value, {}, upgradeNum, false)
         end
 end)
