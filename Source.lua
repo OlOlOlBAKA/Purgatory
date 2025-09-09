@@ -4,6 +4,7 @@ local RunService = game:GetService("RunService")
 
 local configs = {
     nodmg = false,
+    autoattack = false,
 }
 
 local localplayer = Players.LocalPlayer
@@ -16,6 +17,8 @@ local OnClientEvents = ReSt:WaitForChild("OnClientEvents")
 
 local plrdmg = OnServerEvents:WaitForChild("PlrDamaged")
 local upgradeselect = OnClientEvents:WaitForChild("UpgradeSelect")
+
+local enemies = workspace:WaitForChild("Enemies")
 
 local basicTable = {"Power", "Agility", "Vitality", "Force", "Range"}
 local rareTable = {"Greatsword", "Maestro", "Shatter", "Brute force", "Adrenaline", "Riposte", "Fleetfoot", "Survivor", "Healthpack"}
@@ -30,6 +33,20 @@ local function isInTable(tbl, value)
     end
     return false
 end
+
+task.spawn(function()
+   while task.wait() do
+      if configs.autoattack then
+      for _,v in pairs(enemies:GetChildren()) do
+         if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") then
+            if v.Humanoid.Health > 0 then
+   OnServerEvents:WaitForChild("CombatServer"):FireServer(v:WaitForChild("HumanoidRootPart"), "Melee",{riposte = false,backstab = false})
+            end
+         end
+      end
+      end
+   end
+end)
 
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Window = Rayfield:CreateWindow({
@@ -72,10 +89,20 @@ local Window = Rayfield:CreateWindow({
 local MainTab = Window:CreateTab("Main", 4483362458) -- Title, Image
 local MainSection = MainTab:CreateSection("Main")
 local PlayerTab = Window:CreateTab("Player", 4483362458) -- Title, Image
-local MainSection = PlayerTab:CreateSection("Main")
+local PlayerSection = PlayerTab:CreateSection("Main")
+local UITab = Window:CreateTab("UI Settings", 4483362458) -- Title, Image
+local UISection = PlayerTab:CreateSection("UI Settings")
 
 -- Main Tab
 
+local AutoAttackToggle = MainTab:CreateToggle({
+   Name = "Auto Attack",
+   CurrentValue = false,
+   Flag = "AutoAttackToggle", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+        configs.autoattack = Value
+   end,
+})
 local NoDmgToggle = MainTab:CreateToggle({
    Name = "No Damage",
    CurrentValue = false,
@@ -156,6 +183,19 @@ localplayer.CameraMaxZoomDistance = 400
    end,
 })
 
+-- UI SETTINGS TAB
+
+local ThemeDropdown = UITab:CreateDropdown({
+   Name = "UI Theme",
+   Options = {"Default","AmberGlow","Bloom","DarkBlue","Green","Light","Ocean","Serenity",},
+   CurrentOption = {"Default"},
+   MultipleOptions = false,
+   Flag = "ThemeDropdown", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+      Value = unpack(Value)
+Window.ModifyTheme(Value)
+   end,
+})
 
 
 Rayfield:LoadConfiguration()
