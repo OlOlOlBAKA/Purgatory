@@ -155,3 +155,7 @@ localplayer.CameraMinZoomDistance = 0.5
 localplayer.CameraMaxZoomDistance = 400
    end,
 })
+
+
+
+Rayfield:LoadConfiguration()
