@@ -1,5 +1,6 @@
 local ReSt = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
 
 local configs = {
     nodmg = false,
@@ -9,7 +10,6 @@ local localplayer = Players.LocalPlayer
 local character = localplayer.Character
 local humanoid = character:WaitForChild("Humanoid")
 local rootpart = character:WaitForChild("HumanoidRootPart")
-local camera = workspace.CurrentCamera
 
 local OnServerEvents = ReSt:WaitForChild("OnServerEvents")
 local OnClientEvents = ReSt:WaitForChild("OnClientEvents")
@@ -21,9 +21,6 @@ local basicTable = {"Power", "Agility", "Vitality", "Force", "Range"}
 local rareTable = {"Greatsword", "Maestro", "Shatter", "Brute force", "Adrenaline", "Riposte", "Fleetfoot", "Survivor", "Healthpack"}
 local legendaryTable = {"Reaper", "Blackhole", "Cataclysm", "PerfectDodge", "Shadowstep", "Dismantle", "Assassin", "Giantslayer", "Momentum"}
 local ferrymanTable = {"Lag","Speedster","Turtle","Heavy","Vampire","Glasscannon"}
-
-local savedCameraType = camera.CameraType
-local savedCFrame = camera.CFrame
 
 local function isInTable(tbl, value)
     for _, v in ipairs(tbl) do
@@ -125,6 +122,7 @@ upgradeselect.OnClientEvent:Once(function()
         end
 
         if Value ~= "None" then
+            task.wait(0.1)
             OnServerEvents.UpgradeSelected:FireServer(Value, {}, upgradeNum, false)
         end
 end)
@@ -144,5 +142,16 @@ local WalkSpeedSlider = PlayerTab:CreateSlider({
    humanoid.WalkSpeed = Value
    end,
 })
-
-
+local FixCamButton = PlayerTab:CreateButton({
+   Name = "Fix Camera",
+   Callback = function()
+   workspace.CurrentCamera:Destroy()
+    repeat wait() until workspace.CurrentCamera
+wait(0.1)
+local cam = workspace.CurrentCamera
+cam.CameraSubject = character
+    cam.CameraType = Enum.CameraType.Custom
+localplayer.CameraMinZoomDistance = 0.5
+localplayer.CameraMaxZoomDistance = 400
+   end,
+})
